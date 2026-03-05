@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_telegram" android:title="Telegram Channel" android:icon="@android:drawable/ic_menu_send" />
+    <item android:id="@+id/nav_facebook" android:title="Facebook Page" android:icon="@android:drawable/ic_menu_share" />
+    <item android:id="@+id/nav_whatsapp" android:title="WhatsApp Channel" android:icon="@android:drawable/stat_sys_speakerphone" />
+    <item android:id="@+id/nav_youtube" android:title="YouTube Channel" android:icon="@android:drawable/ic_menu_slideshow" />
+    <item android:id="@+id/nav_blog" android:title="Official Blog" android:icon="@android:drawable/ic_menu_agenda" />
+</menu>

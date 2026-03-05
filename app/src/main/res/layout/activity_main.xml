@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Toolbar باللون الأحمر -->
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/card_bg"
+            app:title="PLAYER BALLON PRO"
+            app:titleCentered="true"
+            app:titleTextColor="@color/accent_red"
+            app:navigationIcon="@android:drawable/ic_menu_sort_by_size"
+            app:navigationIconTint="@color/accent_red"
+            android:elevation="8dp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/inputScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="20dp"
+                        app:cardBackgroundColor="@color/card_bg"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#334155">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <EditText android:id="@+id/etName" android:hint="NAME" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@null" android:padding="12dp"/>
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#334155" android:layout_marginVertical="8dp"/>
+
+                            <EditText android:id="@+id/etUrl" android:hint="URL LINK" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@null" android:padding="12dp"/>
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#334155" android:layout_marginVertical="8dp"/>
+
+                            <EditText android:id="@+id/etUserAgent" android:hint="User Agent" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@null" android:padding="12dp"/>
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#334155" android:layout_marginVertical="8dp"/>
+
+                            <EditText android:id="@+id/etReferrer" android:hint="REFFERER" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@null" android:padding="12dp"/>
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#334155" android:layout_marginVertical="8dp"/>
+
+                            <EditText android:id="@+id/etCookie" android:hint="COOKIE" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@null" android:padding="12dp"/>
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#334155" android:layout_marginVertical="8dp"/>
+
+                            <EditText android:id="@+id/etDrmKey" android:hint="DRM KEY (ID:Key)" android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@null" android:padding="12dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="65dp"
+                        android:text="PLAY NOW"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="25dp"
+                        app:cornerRadius="16dp"
+                        android:backgroundTint="@color/accent_red"
+                        android:textColor="@color/text_primary"/>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+            <FrameLayout
+                android:id="@+id/playerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:background="#000000">
+
+                <androidx.media3.ui.PlayerView
+                    android:id="@+id/playerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:resize_mode="fill"
+                    app:use_controller="true"
+                    app:controller_layout_id="@layout/custom_controls" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PLAYER BALLON PRO"
+                    android:textColor="#33FFFFFF"
+                    android:textSize="14sp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="20dp"
+                    android:textStyle="bold|italic"/>
+            </FrameLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/card_bg"
+        app:itemTextColor="@color/text_primary"
+        app:itemIconTint="@color/accent_red"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/side_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
