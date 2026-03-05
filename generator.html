@@ -13,8 +13,9 @@
         .btn-red { background: #FF0000; color: white; font-weight: bold; border-radius: 10px; padding: 12px; border: none; }
         .btn-red:hover { background: #B71C1C; color: white; }
         .result-box { background: #222; padding: 15px; border-radius: 10px; border: 1px dashed #FF0000; word-break: break-all; font-family: monospace; color: #00FF00; margin-top: 20px; display: none; }
-        label { color: #EF9A9A; font-weight: bold; margin-top: 10px; }
+        label { color: #EF9A9A; font-weight: bold; margin-top: 10px; font-size: 14px; }
         .badge-pro { background: #FF0000; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
+        .section-title { border-right: 3px solid #FF0000; padding-right: 10px; margin-top: 20px; color: #fff; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -22,27 +23,36 @@
 <div class="container">
     <div class="text-center mb-4">
         <h2>PLAYER <span style="color: #FF0000;">BALLON PRO</span></h2>
-        <p class="text-secondary">مستخرج الروابط المشفرة لنظام Deep Links</p>
+        <p class="text-secondary">مستخرج الروابط الاحترافي (Deep Links + DRM)</p>
     </div>
 
-    <div class="card mx-auto" style="max-width: 600px;">
-        <h4 class="mb-4 text-center">إنشاء رابط مشفر <span class="badge-pro">Base64</span></h4>
+    <div class="card mx-auto" style="max-width: 650px;">
+        <h4 class="mb-4 text-center">توليد الرابط المتقدم <span class="badge-pro">PRO</span></h4>
         
-        <label>رابط الفيديو المباشر (Direct URL):</label>
+        <div class="section-title">بيانات الفيديو الأساسية</div>
+        <label>رابط الفيديو المباشر (Direct URL) * :</label>
         <input type="text" id="videoUrl" class="form-control" placeholder="http://server.com/live.m3u8">
 
         <label>اسم القناة (اختياري):</label>
         <input type="text" id="channelName" class="form-control" placeholder="beIN Sports HD">
 
+        <div class="section-title">إعدادات الرؤوس (Headers)</div>
         <label>الرأس (User-Agent) - اختياري:</label>
-        <input type="text" id="userAgent" class="form-control" placeholder="PlayerBallon/1.0">
+        <input type="text" id="userAgent" class="form-control" placeholder="VLC/3.0.0">
+
+        <label>المرجع (Referer) - اختياري:</label>
+        <input type="text" id="referer" class="form-control" placeholder="https://google.com">
+
+        <div class="section-title">إعدادات الحماية (DRM)</div>
+        <label>مفتاح Clearkey (KeyID:Key):</label>
+        <input type="text" id="drmKey" class="form-control" placeholder="f3aa...:9a24...">
 
         <button class="btn-red w-100 mt-4" onclick="generateLink()">توليد الرابط المشفر الآن</button>
 
         <div id="resultArea" class="result-box">
-            <p style="color: white; font-size: 14px;">انسخ هذا الرابط وضعه في AppCreator24:</p>
-            <span id="finalLink"></span>
-            <button class="btn btn-sm btn-outline-light w-100 mt-3" onclick="copyLink()">نسخ الرابط</button>
+            <p style="color: white; font-size: 14px;">انسخ الرابط التالي وضعه في AppCreator24 (قسم Web):</p>
+            <div id="finalLink" style="font-size: 12px; margin-bottom: 10px;"></div>
+            <button class="btn btn-sm btn-outline-light w-100" onclick="copyLink()">نسخ الرابط</button>
         </div>
     </div>
 </div>
@@ -51,29 +61,34 @@
     function generateLink() {
         const url = document.getElementById('videoUrl').value.trim();
         const ua = document.getElementById('userAgent').value.trim();
+        const ref = document.getElementById('referer').value.trim();
+        const drm = document.getElementById('drmKey').value.trim();
         
         if (!url) {
             alert("الرجاء إدخال رابط الفيديو أولاً!");
             return;
         }
 
-        // 1. تشفير الرابط لـ Base64
-        const encodedUrl = btoa(unescape(encodeURIComponent(url)));
-
-        // 2. بناء الرابط النهائي الذي سيفتح تطبيقك عبر الجسر
-        // سنستخدم رابط index.html الذي أنشأناه سابقاً كجسر
+        // بناء الرابط الموجه لصفحة index.html
+        // سنمرر البيانات كـ Parameters ليقوم index.html بتشفيرها وإرسالها للتطبيق
         const baseBridge = "https://ballon17.github.io/PlayerBallon/";
-        const finalUrl = `${baseBridge}?url=${encodeURIComponent(url)}${ua ? '&ua=' + encodeURIComponent(ua) : ''}`;
+        
+        let finalUrl = `${baseBridge}?url=${encodeURIComponent(url)}`;
+        
+        if (ua) finalUrl += `&ua=${encodeURIComponent(ua)}`;
+        if (ref) finalUrl += `&ref=${encodeURIComponent(ref)}`;
+        if (drm) finalUrl += `&drm=${encodeURIComponent(drm)}`;
 
-        // إظهار النتيجة
+        // إظهار النتيجة للمستخدم
         document.getElementById('resultArea').style.display = 'block';
         document.getElementById('finalLink').innerText = finalUrl;
     }
 
     function copyLink() {
         const link = document.getElementById('finalLink').innerText;
-        navigator.clipboard.writeText(link);
-        alert("تم نسخ الرابط بنجاح!");
+        navigator.clipboard.writeText(link).then(() => {
+            alert("تم نسخ الرابط بنجاح!");
+        });
     }
 </script>
 
