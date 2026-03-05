@@ -5,35 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlayerBallon Pro | Secure Redirect</title>
     <style>
-        body { background: #0F172A; color: white; text-align: center; font-family: sans-serif; padding-top: 100px; }
-        .loader { border: 6px solid #1E293B; border-top: 6px solid #FF0000; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 20px auto; }
+        body { 
+            background: #0F172A; 
+            color: white; 
+            text-align: center; 
+            font-family: sans-serif; 
+            padding-top: 80px; 
+            margin: 0;
+        }
+        .loader { 
+            border: 6px solid #1E293B; 
+            border-top: 6px solid #FF0000; 
+            border-radius: 50%; 
+            width: 60px; 
+            height: 60px; 
+            animation: spin 1s linear infinite; 
+            margin: 20px auto; 
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        h2 { color: #FF0000; }
+        h2 { color: #FF0000; margin-bottom: 10px; font-size: 1.5rem; }
+        p { color: #94A3B8; font-size: 1rem; padding: 0 20px; }
+        
+        /* زر التحميل اليدوي يظهر فقط في حال فشل التحويل التلقائي */
+        .download-area {
+            margin-top: 30px;
+            display: none; /* مخفي افتراضياً */
+        }
+        .btn-download {
+            background: #FF0000;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+        }
     </style>
 </head>
 <body>
     <div class="loader"></div>
-    <h2>جاري تشفير الرابط والفتح في PLAYER BALLON PRO</h2>
-    <p>برجاء الانتظار ثانية واحدة...</p>
+    <h2 id="status-title">جاري تشفير الرابط والفتح...</h2>
+    <p id="status-desc">برجاء الانتظار ثانية واحدة، يتم توجيهك إلى PLAYER BALLON PRO</p>
+
+    <!-- منطقة التحميل تظهر فقط إذا لم يفتح التطبيق -->
+    <div id="download-area" class="download-area">
+        <p>يبدو أن المشغل غير مثبت على هاتفك!</p>
+        <br>
+        <a href="https://github.com/Ballon17/PlayerBallon/raw/main/app-debug.apk" class="btn-download">تحميل المشغل APK الآن</a>
+    </div>
 
     <script>
         window.onload = function() {
+            // 1. تحديد رابط تحميل التطبيق (تأكد من صحة هذا الرابط في مستودعك)
+            const apkDownloadUrl = "https://github.com/Ballon17/PlayerBallon/raw/main/app-debug.apk";
+
             const params = new URLSearchParams(window.location.search);
             const rawUrl = params.get('url'); 
             const ua = params.get('ua') || '';
             const ref = params.get('ref') || '';
+            const drm = params.get('drm') || '';
 
             if (rawUrl) {
-                // تشفير الرابط لـ Base64
+                // 2. تشفير الرابط لـ Base64
                 const encodedUrl = btoa(unescape(encodeURIComponent(rawUrl)));
 
-                // بناء رابط الـ Intent
-                const intentLink = `intent://play?code=${encodedUrl}&ua=${encodeURIComponent(ua)}&ref=${encodeURIComponent(ref)}#Intent;scheme=ballon;package=com.ballon.player;S.browser_fallback_url=https://github.com/Ballon17/PlayerBallon;end`;
+                // 3. بناء رابط الـ Intent المطور مع ميزة التوجيه التلقائي (Fallback)
+                // إذا لم يجد الأندرويد الحزمة com.ballon.player، سيقوم بفتح apkDownloadUrl
+                const intentLink = `intent://play?code=${encodedUrl}&ua=${encodeURIComponent(ua)}&ref=${encodeURIComponent(ref)}&drm=${encodeURIComponent(drm)}#Intent;scheme=ballon;package=com.ballon.player;S.browser_fallback_url=${encodeURIComponent(apkDownloadUrl)};end`;
 
-                // القفز للتطبيق
+                // 4. محاولة الفتح
                 window.location.href = intentLink;
+
+                // 5. في حال لم ينجح التحويل التلقائي (بعض المتصفحات القديمة)، نظهر زر التحميل بعد 3 ثوانٍ
+                setTimeout(function() {
+                    document.getElementById('download-area').style.display = 'block';
+                    document.getElementById('status-title').innerText = "فشل الفتح التلقائي";
+                }, 3000);
+
             } else {
-                document.body.innerHTML = "<h1>خطأ: لا يوجد رابط فيديو!</h1>";
+                document.body.innerHTML = "<h1>خطأ: لم يتم العثور على رابط فيديو</h1>";
             }
         };
     </script>
