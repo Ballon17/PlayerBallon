@@ -3,40 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlayerBallon Pro Redirect</title>
+    <title>PlayerBallon Pro | Secure Redirect</title>
     <style>
-        body { background-color: #0F172A; color: white; text-align: center; font-family: sans-serif; padding-top: 80px; }
-        .loader { border: 6px solid #1E293B; border-top: 6px solid #38BDF8; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 20px auto; }
+        body { background: #0F172A; color: white; text-align: center; font-family: sans-serif; padding-top: 100px; }
+        .loader { border: 6px solid #1E293B; border-top: 6px solid #FF0000; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        h2 { color: #38BDF8; }
+        h2 { color: #FF0000; }
     </style>
 </head>
 <body>
     <div class="loader"></div>
-    <h2>جاري تحويلك إلى PLAYER BALLON PRO</h2>
+    <h2>جاري تشفير الرابط والفتح في PLAYER BALLON PRO</h2>
     <p>برجاء الانتظار ثانية واحدة...</p>
 
     <script>
         window.onload = function() {
-            // 1. جلب البيانات من الرابط القادم من AppCreator24
             const params = new URLSearchParams(window.location.search);
-            const rawUrl = params.get('url'); // الرابط العادي
+            const rawUrl = params.get('url'); 
             const ua = params.get('ua') || '';
             const ref = params.get('ref') || '';
-            const cookie = params.get('cookie') || '';
-            const drm = params.get('drm') || '';
 
             if (rawUrl) {
-                // 2. تشفير الرابط الأصلي إلى Base64 (لحمايته وتسهيل نقله)
+                // تشفير الرابط لـ Base64
                 const encodedUrl = btoa(unescape(encodeURIComponent(rawUrl)));
 
-                // 3. بناء رابط الـ Intent لفتح تطبيقك (مع تمرير الكود المشفر في متغير code)
-                const intentUrl = `intent://play?code=${encodedUrl}&ua=${encodeURIComponent(ua)}&ref=${encodeURIComponent(ref)}&cookie=${encodeURIComponent(cookie)}&drm=${encodeURIComponent(drm)}#Intent;scheme=ballon;package=com.ballon.player;S.browser_fallback_url=https://github.com/Ballon17/PlayerBallon;end`;
+                // بناء رابط الـ Intent
+                const intentLink = `intent://play?code=${encodedUrl}&ua=${encodeURIComponent(ua)}&ref=${encodeURIComponent(ref)}#Intent;scheme=ballon;package=com.ballon.player;S.browser_fallback_url=https://github.com/Ballon17/PlayerBallon;end`;
 
-                // 4. تنفيذ القفز إلى التطبيق
-                window.location.href = intentUrl;
+                // القفز للتطبيق
+                window.location.href = intentLink;
             } else {
-                document.body.innerHTML = "<h2 style='color:red;'>خطأ: لم يتم تزويد رابط للفيديو!</h2>";
+                document.body.innerHTML = "<h1>خطأ: لا يوجد رابط فيديو!</h1>";
             }
         };
     </script>
